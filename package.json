@@ -1,0 +1,31 @@
+{
+  "name": "ts-node-express-server",
+  "version": "1.0.0",
+  "description": "sample node server",
+  "homepage": "https://github.com/angjan/node-server#readme",
+  "bugs": {
+    "url": "https://github.com/angjan/node-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angjan/node-server.git"
+  },
+  "license": "ISC",
+  "author": "jma",
+  "type": "module",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "node --env-file=.env --watch src/server.ts",
+    "start": "node --env-file=.env src/server.ts",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.0",
+    "eslint": "^9.24.0",
+    "prettier": "^3.5.3"
+  }
+}
