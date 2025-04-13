@@ -1,9 +1,12 @@
 import express from "express";
+import itemRoutes from "./routes/itemRoutes";
+import { errorHandler } from "./middlewares/errorHandler";
 
-export const app = express();
+const app = express();
 
 app.use(express.json());
+app.use(errorHandler);
 
-app.get("/", (req, res) => {
-  res.json({ success: true });
-});
+app.use("/items", itemRoutes);
+
+export default app;
