@@ -1,15 +1,18 @@
 import express from "express";
 import helmet from "helmet";
+import cors from "cors";
 
 import itemRoutes from "./routes/itemRoutes";
 
 import { errorHandler } from "./middlewares/errorHandler";
 import Logger from "./lib/logger";
-import morganMiddleware from "./config/morganMiddleware";
+import morganMiddleware from "./middlewares/morganMiddleware";
+import { options } from "./config/corsConfig";
 const app = express();
 
 // setup the logger
 app.use(helmet());
+app.use(cors(options));
 app.use(express.json());
 app.use(morganMiddleware);
 app.use(errorHandler);

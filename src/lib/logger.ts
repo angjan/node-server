@@ -1,7 +1,5 @@
-import dotenv from "dotenv";
 import winston from "winston";
-
-dotenv.config();
+import { isDevelopment } from "../helpers/helpers";
 
 const levels = {
   error: 0,
@@ -12,9 +10,7 @@ const levels = {
 };
 
 const level = () => {
-  const env = process.env.NODE_ENV || "development";
-  const isDevelopment = env === "development";
-  return isDevelopment ? "debug" : "warn";
+  return isDevelopment() ? "debug" : "warn";
 };
 
 const colors = {
