@@ -1,70 +1,101 @@
 import { Request, Response, NextFunction } from "express";
 import { Item, items } from "../models/item";
 
-export const createItem = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { name, description } = req.body;
-    const newItem: Item = { id: Date.now(), name, description };
-    items.push(newItem);
-    res.status(201).json(newItem);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getItems = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.status(200).json(items);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const updateItem = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-    const { name } = req.body;
-    const itemIndex = items.findIndex((item) => item.id === id);
-    if (itemIndex === -1) {
-      res.status(404).json({ message: `Item with id ${id} not found` });
-      return;
-    }
-    items[itemIndex].name = name;
-    res.status(200).json(items[itemIndex]);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getItemById = (
+type ControllerFunction = (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-    const item = items.find((item) => item.id === id);
-    if (!item) {
-      res.status(404).json({ message: `Item with id ${id} not found` });
-      return;
+) => Promise<void>;
+
+const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  NOT_FOUND: 404,
+} as const;
+
+const MESSAGES = {
+  itemNotFound: (id: number) => `Item with id ${id} not found`,
+} as const;
+
+const handleController =
+  (fn: ControllerFunction) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await fn(req, res, next);
+    } catch (err) {
+      next(err);
     }
-    res.status(200).json(item);
-  } catch (err) {
-    next(err);
-  }
+  };
+
+const findItemById = (id: number) => {
+  const itemIndex = items.findIndex((item) => item.id === id);
+  return { itemIndex, item: items[itemIndex] };
 };
 
-export const deleteItem = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-    const itemIndex = items.findIndex((item) => item.id === id);
+const parseId = (req: Request): number => parseInt(req.params.id, 10);
+
+export const createItem = handleController(
+  async (req: Request, res: Response) => {
+    const { name, description } = req.body;
+    const newItem: Item = { id: Date.now(), name, description };
+    items.push(newItem);
+    res.status(HTTP_STATUS.CREATED).json(newItem);
+  },
+);
+
+export const getItems = handleController(
+  async (_req: Request, res: Response) => {
+    res.status(HTTP_STATUS.OK).json(items);
+  },
+);
+
+export const updateItem = handleController(
+  async (req: Request, res: Response) => {
+    const id = parseId(req);
+    const { itemIndex } = findItemById(id);
+
     if (itemIndex === -1) {
-      res.status(404).json({ message: `Item with id ${id} not found` });
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.itemNotFound(id) });
       return;
     }
+
+    const { name } = req.body;
+    items[itemIndex].name = name;
+    res.status(HTTP_STATUS.OK).json(items[itemIndex]);
+  },
+);
+
+export const getItemById = handleController(
+  async (req: Request, res: Response) => {
+    const id = parseId(req);
+    const { item } = findItemById(id);
+
+    if (!item) {
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.itemNotFound(id) });
+      return;
+    }
+
+    res.status(HTTP_STATUS.OK).json(item);
+  },
+);
+
+export const deleteItem = handleController(
+  async (req: Request, res: Response) => {
+    const id = parseId(req);
+    const { itemIndex } = findItemById(id);
+
+    if (itemIndex === -1) {
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.itemNotFound(id) });
+      return;
+    }
+
     const deletedItem = items.splice(itemIndex, 1);
-    res.status(200).json(deletedItem);
-  } catch (err) {
-    next(err);
-  }
-};
+    res.status(HTTP_STATUS.OK).json(deletedItem);
+  },
+);
