@@ -1,7 +1,7 @@
 FROM node:23
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json (if exists)
 COPY package*.json ./
@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3001
 
 # Start the application
-CMD ["npm", "dev"]
+CMD ["npm", "start"]
