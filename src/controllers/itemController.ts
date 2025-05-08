@@ -1,43 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { Item, items } from "../models/item";
+import { Request, Response } from "express";
+import { ItemModel, items } from "../models/item.model";
 
-type ControllerFunction = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => Promise<void>;
-
-const HTTP_STATUS = {
-  OK: 200,
-  CREATED: 201,
-  NOT_FOUND: 404,
-} as const;
-
-const MESSAGES = {
-  itemNotFound: (id: number) => `Item with id ${id} not found`,
-} as const;
-
-const handleController =
-  (fn: ControllerFunction) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await fn(req, res, next);
-    } catch (err) {
-      next(err);
-    }
-  };
-
-const findItemById = (id: number) => {
-  const itemIndex = items.findIndex((item) => item.id === id);
-  return { itemIndex, item: items[itemIndex] };
-};
-
-const parseId = (req: Request): number => parseInt(req.params.id, 10);
+import { findItemById, handleController, parseId } from "./helpers";
+import { HTTP_STATUS, MESSAGES } from "./const";
 
 export const createItem = handleController(
   async (req: Request, res: Response) => {
     const { name, description } = req.body;
-    const newItem: Item = { id: Date.now(), name, description };
+    const newItem: ItemModel = { id: Date.now(), name, description };
     items.push(newItem);
     res.status(HTTP_STATUS.CREATED).json(newItem);
   },

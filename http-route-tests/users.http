@@ -1,0 +1,6 @@
+@baseUrl = localhost:3001
+@token = superSecretToken
+
+### get all users
+GET {{baseUrl}}/users
+

@@ -4,18 +4,21 @@ import cors from "cors";
 
 import itemRoutes from "./routes/itemRoutes";
 import loggerRoutes from "./routes/loggerRoutes";
+import userRoutes from "./routes/userRoutes";
 
 import { errorHandler } from "./middlewares/errorHandler";
 import morganMiddleware from "./middlewares/morganMiddleware";
-import { options } from "./config/corsConfig";
+import { options } from "./config/cors";
 const app = express();
 
 app.use(helmet());
 app.use(cors(options));
 app.use(express.json());
 app.use(morganMiddleware);
+
 app.use("/items", itemRoutes);
 app.use("/logger", loggerRoutes);
+app.use("/users", userRoutes);
 
 app.use(errorHandler);
 

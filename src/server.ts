@@ -1,11 +1,21 @@
 import app from "./app";
 import config from "./config/config";
 import Logger from "./lib/logger";
+import { sequelize } from "./config/database";
 
 const SERVER_START_MESSAGE = "Server running on port";
 
 async function startServer(port: number): Promise<void> {
   try {
+    // Connect DB
+    sequelize
+      .sync()
+      .then(() => {
+        console.log("Database synced");
+      })
+      .catch((error) => {
+        Logger.error(error);
+      });
     await new Promise<void>((resolve) => {
       app.listen(port, () => {
         Logger.info(`${SERVER_START_MESSAGE} ${port}`);
