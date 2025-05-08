@@ -6,4 +6,6 @@ export const HTTP_STATUS = {
 
 export const MESSAGES = {
   itemNotFound: (id: number) => `Item with id ${id} not found`,
+  userNotFound: (id: number) => `User with id ${id} not found`,
+  userDeleted: (id: number) => `User with id ${id} deleted successfully`,
 } as const;

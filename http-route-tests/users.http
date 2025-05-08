@@ -4,3 +4,27 @@
 ### get all users
 GET {{baseUrl}}/users
 
+### Create user
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "refrigerator 11",
+  "email": "refrigerator11@gmail.com"
+}
+
+### Get user by id
+GET {{baseUrl}}/users/2
+
+###1
+### Update user
+PUT {{baseUrl}}/users/2
+Content-Type: application/json
+
+{
+  "name": "ref",
+  "email": "ref@yahoo.com"
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/1
