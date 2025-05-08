@@ -1,9 +1,12 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: node_app
     ports:
       - ${PORT}:${PORT}
+    # env_file: ./.env  # Uncomment if .env file exists
     environment:
       - NODE_ENV=${NODE_ENV}
       - DATABASE_HOST=${DATABASE_HOST}
@@ -18,23 +21,36 @@ services:
     volumes:
       - ./:/app
     command: npm run dev
+    networks:
+      - appnet
+    # No external dependencies (e.g., database), but add here if needed
 
   postgres:
+    container_name: postgres
     image: postgres:15
     ports:
-      - '5432:5432'
+      - ${DATABASE_PORT}:${DATABASE_PORT}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/
+      - ./postgres-init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - appnet
       
   redis:
     image: redis:7
     container_name: redis
     ports:
         - ${REDIS_PORT}:${REDIS_PORT}
+    networks:
+      - appnet
 
 volumes:
   postgres_data:
+
+networks:
+  appnet:
+    driver: bridge
