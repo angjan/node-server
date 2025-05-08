@@ -1,0 +1,84 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Build outputs
+dist/
+build/
+out/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Version control
+.git/
+.gitignore
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Logs and debug
+logs/
+*.log
+
+# Test and HTTP files
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Documentation and markdown
+README*
+*.md
+docs/
+
+# Docker and Compose files
+Dockerfile*
+docker-compose*
+compose.yaml.bak
+
+# Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Miscellaneous
+*.http
+
+# SQL scripts (if not needed in build context)
+postgres-init-scripts/
+
+# Exclude backup files
+*.bak
+
+# Exclude coverage and cache (if any)
+coverage/
+.coverage
+
+# Exclude Python cache (for completeness)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Exclude Go cache (for completeness)
+.go-cache/
+
+# Exclude SVN and Mercurial
+.svn/
+.hg/
