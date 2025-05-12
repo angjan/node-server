@@ -1,5 +1,5 @@
 ### GET request to example server
-GET http://localhost:3001/logger
+GET http://localhost:3001/test
 
 ### GET request to example server in debug mode
-GET http://localhost:9229/logger
+GET http://localhost:9229/test

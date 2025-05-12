@@ -3,7 +3,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import authRoutes from "./routes/auth.routes";
-import loggerRoutes from "./routes/logger.routes";
+import testRoutes from "./routes/test.routes";
 import userRoutes from "./routes/user.routes";
 
 import { errorHandler } from "./middlewares/errorHandler";
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(morganMiddleware);
 
 app.use("/auth", authRoutes);
-app.use("/logger", loggerRoutes);
+app.use("/test", testRoutes);
 app.use("/users", userRoutes);
 
 app.use(errorHandler);
