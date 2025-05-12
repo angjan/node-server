@@ -22,14 +22,6 @@ export const getUserById = handleController(
   },
 );
 
-export const createUser = handleController(
-  async (req: Request, res: Response) => {
-    const { name, email } = req.body;
-    const user = await User.create({ name, email });
-    res.status(HTTP_STATUS.CREATED).json(user);
-  },
-);
-
 export const updateUser = handleController(
   async (req: Request, res: Response) => {
     const id = parseId(req);
