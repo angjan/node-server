@@ -2,9 +2,9 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 
-import itemRoutes from "./routes/itemRoutes";
-import loggerRoutes from "./routes/loggerRoutes";
-import userRoutes from "./routes/userRoutes";
+import authRoutes from "./routes/auth.routes";
+import loggerRoutes from "./routes/logger.routes";
+import userRoutes from "./routes/user.routes";
 
 import { errorHandler } from "./middlewares/errorHandler";
 import morganMiddleware from "./middlewares/morganMiddleware";
@@ -16,7 +16,7 @@ app.use(cors(options));
 app.use(express.json());
 app.use(morganMiddleware);
 
-app.use("/items", itemRoutes);
+app.use("/auth", authRoutes);
 app.use("/logger", loggerRoutes);
 app.use("/users", userRoutes);
 

@@ -6,6 +6,7 @@ services:
     container_name: node_app
     ports:
       - ${PORT}:${PORT}
+      - ${DEBUG_PORT}:${DEBUG_PORT}
     # env_file: ./.env  # Uncomment if .env file exists
     environment:
       - NODE_ENV=${NODE_ENV}

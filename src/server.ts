@@ -11,9 +11,9 @@ async function startServer(port: number): Promise<void> {
     sequelize
       .sync()
       .then(() => {
-        console.log("Database synced");
+        Logger.info("Database synced");
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         Logger.error(error);
       });
     await new Promise<void>((resolve) => {

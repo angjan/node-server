@@ -1,4 +1,12 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+} from "sequelize-typescript";
+import { Login } from "./auth.model";
 
 @Table
 export class User extends Model {
@@ -17,8 +25,15 @@ export class User extends Model {
 
   @Column({
     type: DataType.STRING,
-    unique: true,
-    allowNull: false,
+    unique: false,
+    allowNull: true,
   })
-  email!: string;
+  address!: string;
+
+  @ForeignKey(() => Login)
+  @Column
+  loginId!: number;
+
+  @BelongsTo(() => Login)
+  login?: Login;
 }

@@ -1,0 +1,24 @@
+@baseUrl = localhost:3001
+@token = superSecretToken
+
+### register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "refrigerator",
+  "email": "refrigerator@gmail.com",
+  "password": "refrigerat0r"
+}
+
+### register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "johndoe3@gmail.com",
+  "password": "superSecurePassword",
+  "address": "Super 2, 0323 Superber"
+}
+

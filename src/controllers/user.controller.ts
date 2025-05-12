@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { handleController, parseId } from "./helpers";
-import { HTTP_STATUS, MESSAGES } from "./const";
+import { handleController, parseId } from "../helpers/helpers";
+import { HTTP_STATUS, MESSAGES } from "../const/const";
 import { User } from "../models/user.model";
 
 export const getUsers = handleController(
@@ -41,7 +41,7 @@ export const updateUser = handleController(
     }
 
     user.name = name ?? user.name;
-    user.email = email ?? user.email;
+    user.address = email ?? user.address;
     await user.save();
     res.status(HTTP_STATUS.OK).json(user);
   },
