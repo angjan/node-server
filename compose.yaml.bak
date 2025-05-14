@@ -1,0 +1,19 @@
+# Compose file for a TypeScript Node.js app
+services:
+  ts-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ts-app
+    ports:
+      - "3001:3001"  # Expose app on localhost:3001
+    restart: unless-stopped
+    init: true
+    # env_file: ./.env  # Uncomment if .env file exists
+    networks:
+      - appnet
+    # No external dependencies detected (e.g., database), but add here if needed
+
+networks:
+  appnet:
+    driver: bridge

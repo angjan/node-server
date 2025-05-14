@@ -9,6 +9,8 @@ services:
       - ${DEBUG_PORT}:${DEBUG_PORT}
     # env_file: ./.env  # Uncomment if .env file exists
     environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
       - NODE_ENV=${NODE_ENV}
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=${DATABASE_PORT}
@@ -16,11 +18,14 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_NAME=${DATABASE_NAME}
       - REDIS_HOST=${REDIS_HOST}
+      - SESSION_SECRET=supersecretkey
+      - JWT_SECRET=anothersecret
     depends_on:
       - ${DATABASE_HOST}
       - ${REDIS_HOST}
     volumes:
       - ./:/app
+      - /app/node_modules  # ensures container uses its own node_modules
     command: npm run dev
     networks:
       - appnet

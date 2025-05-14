@@ -2,8 +2,9 @@ import app from "./app";
 import config from "./config/config";
 import Logger from "./lib/logger";
 import { sequelize } from "./config/database";
+import { connectRedis } from "./config/redis";
 
-const SERVER_START_MESSAGE = "Server running on port";
+const SERVER_START_MESSAGE = "✅ Server running on port";
 
 async function startServer(port: number): Promise<void> {
   try {
@@ -11,11 +12,15 @@ async function startServer(port: number): Promise<void> {
     sequelize
       .sync()
       .then(() => {
-        Logger.info("Database synced");
+        Logger.info("✅ Database synced");
       })
       .catch((error: Error) => {
         Logger.error(error);
       });
+
+    // connect to Redis
+    await connectRedis();
+
     await new Promise<void>((resolve) => {
       app.listen(port, () => {
         Logger.info(`${SERVER_START_MESSAGE} ${port}`);

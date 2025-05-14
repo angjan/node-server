@@ -9,6 +9,7 @@ export const HTTP_STATUS = {
 export const MESSAGES = {
   incorrectForm: "incorrect form submission",
   loginExists: "login already exists",
+  loginNotFound: "user or password is incorrect",
   userNotFound: (id: number) => `User with id ${id} not found`,
   userDeleted: (id: number) => `User with id ${id} deleted successfully`,
 } as const;

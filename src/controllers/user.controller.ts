@@ -1,16 +1,22 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { handleController, parseId } from "../helpers/helpers";
 import { HTTP_STATUS, MESSAGES } from "../const/const";
 import { User } from "../models/user.model";
 
-export const getUsers = handleController(
+type ControllerFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => Promise<void>;
+
+export const getUsers: ControllerFunction = handleController(
   async (_req: Request, res: Response) => {
     const users = await User.findAll();
     res.status(HTTP_STATUS.OK).json(users);
   },
 );
 
-export const getUserById = handleController(
+export const getUserById: ControllerFunction = handleController(
   async (req: Request, res: Response) => {
     const id = parseId(req);
     const user = await User.findByPk(id);
@@ -22,7 +28,7 @@ export const getUserById = handleController(
   },
 );
 
-export const updateUser = handleController(
+export const updateUser: ControllerFunction = handleController(
   async (req: Request, res: Response) => {
     const id = parseId(req);
     const { name, email } = req.body;
@@ -38,7 +44,8 @@ export const updateUser = handleController(
     res.status(HTTP_STATUS.OK).json(user);
   },
 );
-export const deleteUser = handleController(
+
+export const deleteUser: ControllerFunction = handleController(
   async (req: Request, res: Response) => {
     const id = parseId(req);
     const user = await User.findByPk(id);

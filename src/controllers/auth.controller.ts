@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import { Login } from "../models/auth.model";
 
 import { HTTP_STATUS, MESSAGES } from "../const/const";
 import { getTransaction } from "../config/database";
 import { User } from "../models/user.model";
 import { RegisterInput } from "../schemas/auth.schema";
+import {
+  createUserSession,
+  handleHashing,
+  loginUserHandler,
+} from "../helpers/helpers";
+import { redisClient } from "../config/redis";
 
 export const registerUser = async (
   req: Request<{}, {}, RegisterInput>,
@@ -25,7 +30,7 @@ export const registerUser = async (
       res.status(HTTP_STATUS.CONFLICT).json(MESSAGES.loginExists);
       return;
     }
-    const hash = await bcrypt.hash(password, 10);
+    const hash = await handleHashing(password);
     const login = await Login.create(
       { email, passwordHash: hash },
       { transaction: t },
@@ -48,5 +53,33 @@ export const registerUser = async (
   } catch (err) {
     await t.rollback(); // rollback on error
     throw err;
+  }
+};
+
+export const loginUserAuthentication = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const cached = await redisClient.get(email);
+  if (cached) {
+    res.status(HTTP_STATUS.OK).json({ token: JSON.parse(cached) });
+    return;
+  }
+
+  try {
+    const user = await loginUserHandler(req);
+    if (!user) {
+      res.status(HTTP_STATUS.NOT_FOUND).json(MESSAGES.loginNotFound);
+      return;
+    }
+
+    const { name } = user;
+    const { email } = user.login;
+    const session = await createUserSession(email, name);
+
+    res.status(HTTP_STATUS.OK).json({ session });
+    return;
+  } catch (e) {
+    res.status(HTTP_STATUS.NOT_FOUND).json(MESSAGES.loginNotFound);
+    return;
   }
 };

@@ -1,0 +1,26 @@
+# node-server
+example node server with ts
+
+## Running with Docker
+
+- Uses Node.js version 22.13.1 (slim image)
+- Exposes port `3001` (mapped to host `3001`)
+- Production build runs as a non-root user for security
+- Installs dependencies using `npm ci` for reproducible builds
+
+### Environment Variables
+- You can provide a `.env` file in the project root to set environment variables (see `.env.example` for reference)
+- Uncomment the `env_file` line in `docker-compose.yml` if you want to use your `.env` file
+
+### Build and Run
+
+```sh
+# Build and start the app
+docker compose up --build
+```
+
+The app will be available at `http://localhost:3001`.
+
+### Notes
+- All dependencies are installed and the TypeScript code is built inside the container
+- No database service is included by default; add one to `docker-compose.yml` if needed
