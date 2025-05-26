@@ -1,5 +1,5 @@
 import winston from "winston";
-import { isDevelopment } from "../helpers/helpers";
+import { isDevelopment } from "../utils/helpers";
 
 const levels = {
   error: 0,

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { handleController, parseId } from "../helpers/helpers";
+import { handleController, parseId } from "../utils/helpers";
 import { HTTP_STATUS, MESSAGES } from "../const/const";
 import { User } from "../models/user.model";
 
